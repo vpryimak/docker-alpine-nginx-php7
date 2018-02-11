@@ -19,6 +19,7 @@ class IndexController extends Controller
         // 取出来code
         $files = "token.txt";
         $json = $this->get_to_file($files);
+        // print_r($json);die;
         $result_res_one = json_decode($json,true);
 
         $account_id = $result_res_one['data']['authorizer_info']['account_id'];
@@ -445,20 +446,10 @@ class IndexController extends Controller
 
 	}
 	// 从文件中取出字符串
-	public function get_to_file(){
-        $str = file_get_contents('test.txt');//将整个文件内容读入到一个字符串中
+	function get_to_file($file){
+        $str = file_get_contents($file);//将整个文件内容读入到一个字符串中
         $str_encoding = mb_convert_encoding($str, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');//转换字符集（编码）
-        $arr = explode("\r\n", $str_encoding);//转换成数组
-
-        //去除值中的空格
-        foreach ($arr as &$row) {
-            $row = trim($row);
-        }
-
-        unset($row);
-        //得到后的数组
-        return $arr;
-     
+        return $str_encoding;
     }
 
 
