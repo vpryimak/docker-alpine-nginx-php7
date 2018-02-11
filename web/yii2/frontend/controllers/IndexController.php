@@ -16,18 +16,23 @@ class IndexController extends Controller
 	// 获取账号的信息
 	public function actionIndex(){
 
+        // 取出来code
+        $files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
 		$nonce = $this->rand(10);
 		$timestamp = time();
 
-		// 获取access_token
-		
-
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";
-		$account_id = "1378";
+		// $account_id = "5886274";
+		// $access_token = "ad4b3adfb5842a6c836a7421c85eeaa1";
 
 		$filtering = '[{"field":"corporation_name","operator":"CONTAINS","values":["腾讯"]}]';
 
-		$url = "https://sandbox-api.e.qq.com/v1.0/advertiser/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&filtering=".$filtering."&page=1&page_size=10";
+		$url = "https://api.e.qq.com/v1.0/advertiser/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&filtering=".$filtering."&page=1&page_size=10";
 		// echo $url;die;
 		
 
@@ -36,7 +41,24 @@ class IndexController extends Controller
 	}
 
 
-	
+	// 获取资金账号信息
+	public function actionAccount(){
+
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		$url = "https://api.e.qq.com/v1.0/funds/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id;
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);
+	}
 
 
 	// 申请服务商子客账号
@@ -45,8 +67,12 @@ class IndexController extends Controller
 		$nonce = $this->rand(10);
 		$timestamp = time();
 
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";
-		$account_id = "1378";
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
 
 
 		$GDT['corporation_name']='腾讯计算机系统有限公司';
@@ -63,7 +89,7 @@ class IndexController extends Controller
 		$GDT['contact_person_telephone']='0755-86013388';
 		$GDT['contact_person_telephone']='0755-86013388';
 
-		$url = "https://sandbox-api.e.qq.com/v1.0/advertiser/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+		$url = "https://e.qq.com/v1.0/advertiser/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
@@ -84,14 +110,50 @@ class IndexController extends Controller
 
 		$nonce = $this->rand(10);
 		$timestamp = time();
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";		
-		$url = "https://sandbox-api.e.qq.com/v1.0/campaigns/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+
+		$url = "https://e.qq.com/v1.0/campaigns/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
 
 	}
+	// 获取广告计划
+	public function actionPromotionplanget(){
 
+		
+		// $GDT['campaign_id']= "";
+		$filtering = '[{"field":"campaign_name","operator":"CONTAINS","values":["腾讯"]}]';
+		$page = "1";
+		$page_size = "10";
+		// print_r($GDT);die;
+
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+        
+		$url = "https://api.e.qq.com/v1.0/campaigns/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&filtering=".$filtering."&page=".$page."&page_size=".$page_size;
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);die;
+
+
+	}
 	// 创建定向
 	public function actionDirectional(){ //创建的定向id 13179
  
@@ -104,8 +166,15 @@ class IndexController extends Controller
 
 		$nonce = $this->rand(10);
 		$timestamp = time();
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";		
-		$url = "https://sandbox-api.e.qq.com/v1.0/targetings/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];	
+
+		$url = "https://e.qq.com/v1.0/targetings/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
@@ -113,6 +182,34 @@ class IndexController extends Controller
 		
 
 	}
+
+
+	// 获取广告定向
+	public function actionDirectionalget(){
+
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];	
+
+		$page="1";
+		$page_size="10";
+		$filtering='[{"field":"targeting_name","operator":"EQUALS","values":["腾讯"]}]';
+
+		$url = "https://api.e.qq.com/v1.0/targetings/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&page=".$page."&page_size=".$page_size;
+
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);
+
+
+	}
+
 
 	//创建广告组
 	public function actionAdvertisinggroup(){  //创建的广告组 13814
@@ -139,14 +236,46 @@ class IndexController extends Controller
 
 		$nonce = $this->rand(10);
 		$timestamp = time();
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";		
-		$url = "https://sandbox-api.e.qq.com/v1.0/adgroups/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		$url = "https://e.qq.com/v1.0/adgroups/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
 
 	}
 
+	// 获取广告组
+	public function actionAdvertisinggroupget(){
+
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		// $adgroup_id = "";
+		// $filtering = '[{"field":"end_date","operator":"EQUALS","values":["2017-10-29"]}]';
+		$page = "1";
+		$page_size = "10";
+
+		$url = "https://api.e.qq.com/v1.0/adgroups/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&page=".$page."&page_size=".$page_size;
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);
+
+
+	}
 
 	// 创建标的物
 	public function actionSubjectmatter(){  //普通连接不需要创建标的物
@@ -158,8 +287,15 @@ class IndexController extends Controller
 
 		$nonce = $this->rand(10);
 		$timestamp = time();
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";		
-		$url = "https://sandbox-api.e.qq.com/v1.0/products/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		$url = "https://e.qq.com/v1.0/products/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
@@ -168,7 +304,33 @@ class IndexController extends Controller
 	}
 
 
+	// 获取标的物
+	public function actionSubjectmatterget(){
 
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		$page = "1";
+		$page_size = "10";
+
+		$product_type = "PRODUCT_TYPE_APP_IOS";
+		$product_refs_id = "1212200349";
+
+		$url = "https://api.e.qq.com/v1.0/products/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&product_type=".$product_type."&product_refs_id=".$product_refs_id."&page=".$page."&page_size=".$page_size;
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);
+
+
+
+	}
 	// 广告创意
 	public function actionCreativity(){   //创建的创意id  46057
 
@@ -188,14 +350,45 @@ class IndexController extends Controller
 		
 		$nonce = $this->rand(10);
 		$timestamp = time();
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";		
-		$url = "https://sandbox-api.e.qq.com/v1.0/adcreatives/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];	
+
+		$url = "https://e.qq.com/v1.0/adcreatives/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
 
 	}
 
+	// 获取广告创意
+	public function actionCreativityget(){
+
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+		$page = "1";
+		$page_size = "10";
+
+		$filtering = '[{"field":"adcreative_name","operator":"EQUALS","values":["三国志"]}]';
+		// $adcreative_id = "";
+
+		$url = "https://api.e.qq.com/v1.0/adcreatives/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&page=".$page."&page_size=".$page_size;
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);
+
+	}
 
 	//创建广告
 	public function actionAdvertising(){  //创建的广告id 22559
@@ -212,14 +405,74 @@ class IndexController extends Controller
 
 		$nonce = $this->rand(10);
 		$timestamp = time();
-		$access_token = "0fef5febf5fe0f24434e19e602e3cf4a";		
-		$url = "https://sandbox-api.e.qq.com/v1.0/ads/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		$url = "https://e.qq.com/v1.0/ads/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
 
 
 	}
+	// 获取完整的广告信息
+	public function actionAdvertisingget(){
+
+		$nonce = $this->rand(10);
+		$timestamp = time();
+
+		$files = "token.txt";
+        $json = $this->get_to_file($files);
+        $result_res_one = json_decode($json,true);
+
+        $account_id = $result_res_one['data']['authorizer_info']['account_id'];
+        $access_token = $result_res_one['data']['access_token'];
+
+		$page = "90";
+		$page_size = "10";
+
+		$url = "https://api.e.qq.com/v1.0/ads/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&page=".$page."&page_size=".$page_size;
+		// echo $url;die;
+		$result = $this->curl_request($url);
+		print_r($result);
+
+
+
+	}
+	// 从文件中取出字符串
+	public function get_to_file(){
+        $str = file_get_contents('test.txt');//将整个文件内容读入到一个字符串中
+        $str_encoding = mb_convert_encoding($str, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');//转换字符集（编码）
+        $arr = explode("\r\n", $str_encoding);//转换成数组
+
+        //去除值中的空格
+        foreach ($arr as &$row) {
+            $row = trim($row);
+        }
+
+        unset($row);
+        //得到后的数组
+        return $arr;
+     
+    }
+
+
+    //将字符串写入文件
+    function put_to_file($file, $content) {
+        $fopen = fopen($file, 'wb');
+        if (!$fopen) {
+            return false;
+        }
+        fwrite($fopen, $content);
+        fclose($fopen);
+        return true;
+    }
+
 
 	// 生成签名
 	public function rand($len)

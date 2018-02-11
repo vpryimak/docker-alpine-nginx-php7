@@ -62,7 +62,7 @@ class HomeController extends Controller
             echo $Url;
             $res_result = file_get_contents($Url);
             // return $res_result;
-            print_r($res_result);
+            // print_r($res_result);
             $files = "token.txt";
             $result = $this->put_to_file($files,$res_result);
             // 取出来code
