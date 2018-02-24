@@ -28,9 +28,6 @@ class IndexController extends Controller
 		$nonce = $this->rand(10);
 		$timestamp = time();
 
-		// $account_id = "5886274";
-		// $access_token = "ad4b3adfb5842a6c836a7421c85eeaa1";
-
 		$filtering = '[{"field":"corporation_name","operator":"CONTAINS","values":["腾讯"]}]';
 
 		$url = "https://api.e.qq.com/v1.0/advertiser/get?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce."&account_id=".$account_id."&filtering=".$filtering."&page=1&page_size=10";
@@ -96,11 +93,16 @@ class IndexController extends Controller
 		print_r($result);
 		
 	}
+		
+	public function actionPromotionplanindex(){
+		return $this->render('promotionplan.php');
+	}
+
 
 	//创建推广计划
 	public function actionPromotionplan(){ //创建的推广计划id 2671/2661/2709
 
-		$GDT['account_id'] = "100001445"; //广告主帐号 id
+		$GDT['account_id'] = "4002594"; //广告主帐号 id
 		$GDT['campaign_name'] = "春节大促销"; //推广计划名称
 		$GDT['campaign_type'] = "CAMPAIGN_TYPE_NORMAL"; //推广计划类型
 		$GDT['product_type'] = "PRODUCT_TYPE_LINK"; //标的物类型
@@ -120,7 +122,7 @@ class IndexController extends Controller
         $access_token = $result_res_one['data']['access_token'];
 
 
-		$url = "https://e.qq.com/v1.0/campaigns/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
+		$url = "https://api.e.qq.com/v1.0/campaigns/add?access_token=".$access_token."&timestamp=".$timestamp."&nonce=".$nonce;
 
 		$result = $this->curl_request($url,$GDT);
 		print_r($result);
