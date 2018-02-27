@@ -20,7 +20,7 @@ class HomeController extends Controller
 		$nonce = $this->rand(10);
 		$timestamp = time();
 
-		$client_id = "1106673362";
+		$client_id = "1106743558";
 		$redirect_uri = "http://i2137.com/php/home/home";
 
 		$url = "https://developers.e.qq.com/oauth/authorize?client_id=".$client_id."&redirect_uri=".$redirect_uri."&state=maida";
@@ -54,8 +54,8 @@ class HomeController extends Controller
         var_dump($authorization_code_res);
         if (!empty($authorization_code_res)) {
 
-            $client_id = "1106673362";
-            $client_secret = "k0m0gbJZj46nEFVU";
+            $client_id = "1106743558";
+            $client_secret = "3T7NfA0NOrsQUTLf";
             $redirect_uri = "http://i2137.com/php/home/home";
 
             $Url = "https://api.e.qq.com/oauth/token?client_id=".$client_id."&client_secret=".$client_secret."&grant_type=authorization_code&authorization_code=".$authorization_code_res."&redirect_uri=".$redirect_uri;
